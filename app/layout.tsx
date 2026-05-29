@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "She Can Foundation | Contact Form",
   description: "A warm, humanized contact form for She Can Foundation.",
+  icons: {
+    icon: "/s.jpg",
+  }
 };
 
 export default function RootLayout({

@@ -1,6 +1,7 @@
 "use client";
 
 import "./form.css";
+import Link from "next/link";
 import type { FormEvent } from "react";
 import { useState } from "react";
 
@@ -25,18 +26,24 @@ export default function Form() {
             aria-pressed={theme === "dark"}
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           >
-            {theme === "dark" ? "Switch to light" : "Switch to black theme"}
+            {theme === "dark" ? "𖤓" : "☾"}
           </button>
         </div>
         <h1>Leave a message that feels warm, clear, and human.</h1>
-        <p>
+        <p className="hero-description">
           This frontend version keeps the form simple for now, but the design is
           polished enough to feel like a real support touchpoint.
         </p>
         <div className="hero-notes">
-          <span>Frontend first</span>
-          <span>Database later</span>
-          <span>Responsive layout</span>
+          <Link href="/">
+            <span>Home</span>
+          </Link>
+          <Link href="/donate">
+            <span>DONATE</span>
+          </Link>
+          <Link href="/story">
+            <span>Our Story</span>
+          </Link>
         </div>
       </section>
 
@@ -45,8 +52,7 @@ export default function Form() {
           <span className="card-label">Contact form</span>
           <h2>Tell us what you need</h2>
           <p>
-            Share your name, email, and a short message. We will just show a
-            success state for now.
+            Share your name, email, and a short message. We would ❤️ to hear from you!
           </p>
         </div>
 
@@ -64,13 +70,18 @@ export default function Form() {
 
           <div className="field-group">
             <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Your email address"
-              required
-            />
+            <div className="email-row">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Your email address"
+                required
+              />
+              <button type="button" className="verify-button">
+                Verify
+              </button>
+            </div>
           </div>
 
           <div className="field-group">
@@ -78,7 +89,7 @@ export default function Form() {
             <textarea
               id="message"
               name="message"
-              rows={5}
+              rows={4}
               placeholder="Write your message here"
               required
             />
