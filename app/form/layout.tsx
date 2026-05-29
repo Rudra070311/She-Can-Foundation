@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "She Can Foundation",
-  description: "She Can Foundation",
+  title: "She Can Foundation | Contact Form",
+  description: "A warm, humanized contact form for She Can Foundation.",
   icons: {
     icon: "/s.jpg",
   }
@@ -30,9 +30,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-        <body className="min-h-full flex flex-col">
-          {children}
-        </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

@@ -1,108 +1,101 @@
-"use client";
-
-import "./form.css";
+import Image from "next/image";
 import Link from "next/link";
-import type { FormEvent } from "react";
-import { useState } from "react";
+import "./page.css";
 
-export default function Form() {
-  const [submitted, setSubmitted] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmitted(true);
-    event.currentTarget.reset();
-  }
-
+export default function Home() {
   return (
-    <main className={`page-shell theme-${theme}`}>
-      <section className="hero-copy">
-        <div className="hero-topbar">
-          <span className="eyebrow">She Can Foundation</span>
-          <button
-            type="button"
-            className="theme-toggle"
-            aria-pressed={theme === "dark"}
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {theme === "dark" ? "𖤓" : "☾"}
-          </button>
+    <main className="home-shell">
+      <section className="hero-panel">
+        <div className="home-copy">
+          <div className="eyebrow-row">
+            <span className="eyebrow">She Can Foundation</span>
+            <span className="eyebrow-secondary">Education • Safety • Dignity</span>
+          </div>
+
+          <h1>Bold support for girls and communities who deserve more room to rise.</h1>
+
+          <p className="hero-description">
+            We build a brighter path through education, practical help, and local support.
+            The goal is simple: make every child, especially girls, feel seen, safe, and
+            capable of a bigger future.
+          </p>
+
+          <div className="cta-row">
+            <Link className="cta-button primary" href="/form">
+              Contact Us
+            </Link>
+            <a className="cta-button ghost" href="https://shecanfoundation.org/donate" target="_blank" rel="noreferrer">
+              Donate Now
+            </a>
+            <Link className="cta-link" href="/story">
+              Read our story
+            </Link>
+          </div>
+
+          <div className="hero-notes">
+            <span>Education access</span>
+            <span>Women-centered support</span>
+            <span>Community outreach</span>
+          </div>
         </div>
-        <h1>Leave a message that feels warm, clear, and human.</h1>
-        <p className="hero-description">
-          This frontend version keeps the form simple for now, but the design is
-          polished enough to feel like a real support touchpoint.
-        </p>
-        <div className="hero-notes">
-          <Link href="/">
-            <span>Home</span>
-          </Link>
-          <Link href="/donate">
-            <span>DONATE</span>
-          </Link>
-          <Link href="/story">
-            <span>Our Story</span>
-          </Link>
+
+        <div className="visual-stack">
+          <article className="photo-card">
+            <Image
+              src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
+              alt="Students learning together in a bright classroom"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              className="photo-image"
+            />
+            <div className="photo-overlay">
+              <span className="overlay-pill">Hope in motion</span>
+              <p>Small acts of support can open the door to a completely different future.</p>
+            </div>
+          </article>
+
+          <div className="stat-grid">
+            <div className="stat-card">
+              <strong>01</strong>
+              <span>One message can start real help.</span>
+            </div>
+            <div className="stat-card">
+              <strong>Girls</strong>
+              <span>We center dignity, learning, and long-term opportunity.</span>
+            </div>
+            <div className="stat-card accent-card">
+              <strong>Community</strong>
+              <span>Local action, practical care, and visible progress.</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="form-card">
-        <div className="card-header">
-          <span className="card-label">Contact form</span>
-          <h2>Tell us what you need</h2>
+      <section className="impact-band">
+        <div className="impact-card highlight">
+          <span className="impact-label">What we do</span>
+          <h2>Help that feels human, not hidden behind jargon.</h2>
           <p>
-            Share your name, email, and a short message. We would ❤️ to hear from you!
+            We focus on simple, direct support for girls and families: awareness,
+            education, and practical connection to resources.
           </p>
         </div>
 
-        <form className="myform" onSubmit={handleSubmit}>
-          <div className="field-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Your name"
-              required
-            />
+        <div className="impact-list">
+          <div>
+            <span>Learning support</span>
+            <p>Tools and confidence for the next step.</p>
           </div>
-
-          <div className="field-group">
-            <label htmlFor="email">Email</label>
-            <div className="email-row">
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Your email address"
-                required
-              />
-              <button type="button" className="verify-button">
-                Verify
-              </button>
-            </div>
+          <div>
+            <span>Advocacy</span>
+            <p>Standing up for girls who need their voice heard.</p>
           </div>
-
-          <div className="field-group">
-            <label htmlFor="message">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              rows={4}
-              placeholder="Write your message here"
-              required
-            />
+          <div>
+            <span>Care network</span>
+            <p>Connecting people to help that actually reaches them.</p>
           </div>
-
-          <button type="submit" className="submit-button">
-            Submit
-          </button>
-
-          <p className={`success-message ${submitted ? "is-visible" : ""}`}>
-            Form Submitted Successfully
-          </p>
-        </form>
+        </div>
       </section>
     </main>
   );
