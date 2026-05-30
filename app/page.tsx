@@ -106,7 +106,12 @@ export default function Form() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Network response was not ok");
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data.error || data.message || "Network response was not ok");
+      }
+
       setSubmitted(true);
       setStatusMessage("Form submitted successfully.");
       form.reset();
