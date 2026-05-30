@@ -6,9 +6,8 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 
 export default function Form() {
-  const defaultEmail = "rudra070311@gmail.com";
   const [submitted, setSubmitted] = useState(false);
-  const [email, setEmail] = useState(defaultEmail);
+  const [email, setEmail] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [otpSent, setOtpSent] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -111,7 +110,7 @@ export default function Form() {
       setSubmitted(true);
       setStatusMessage("Form submitted successfully.");
       form.reset();
-      setEmail(defaultEmail);
+      setEmail("");
       setOtpCode("");
       setOtpSent(false);
       setVerified(false);
