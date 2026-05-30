@@ -5,6 +5,43 @@ import Link from "next/link";
 import type { FormEvent } from "react";
 import { useState } from "react";
 
+async function readResponseData(response: Response) {
+  const text = await response.text();
+
+  if (!text) {
+    return {};
+  }
+
+  try {
+    return JSON.parse(text) as { error?: string; message?: string };
+  } catch {
+    return { message: text };
+  }
+}
+
+async function postJsonWithRetry(url: string, payload: unknown, attempts = 2) {
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return await fetch(url, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+    } catch (error) {
+      lastError = error;
+
+      if (attempt === attempts) {
+        throw error;
+      }
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("Request failed.");
+}
+
 export default function Form() {
   const [submitted, setSubmitted] = useState(false);
   const [email, setEmail] = useState("");
@@ -26,14 +63,8 @@ export default function Form() {
     setStatusMessage("Sending your code...");
 
     try {
-      const response = await fetch("/api/email-otp", {
-        method: "POST",
-        credentials: "same-origin",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "send", email }),
-      });
-
-      const data = await response.json();
+      const response = await postJsonWithRetry("/api/email-otp", { action: "send", email });
+      const data = await readResponseData(response);
 
       if (!response.ok) {
         throw new Error(data.error || "Could not send verification code.");
@@ -59,14 +90,12 @@ export default function Form() {
     setStatusMessage("Checking your code...");
 
     try {
-      const response = await fetch("/api/email-otp", {
-        method: "POST",
-        credentials: "same-origin",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "verify", email, token: otpCode }),
+      const response = await postJsonWithRetry("/api/email-otp", {
+        action: "verify",
+        email,
+        token: otpCode,
       });
-
-      const data = await response.json();
+      const data = await readResponseData(response);
 
       if (!response.ok) {
         throw new Error(data.error || "That code is not valid.");
@@ -106,7 +135,7 @@ export default function Form() {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json().catch(() => ({}));
+      const data = await readResponseData(res);
 
       if (!res.ok) {
         throw new Error(data.error || data.message || "Network response was not ok");
