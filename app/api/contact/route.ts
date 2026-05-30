@@ -40,26 +40,34 @@ function isVerifiedEmailCookieValid(cookieValue: string | undefined, email: stri
 }
 
 export async function POST(request: NextRequest) {
-    const { name, email, message } = await request.json();
-    const verifiedEmailCookie = request.cookies.get("verified_email")?.value;
+    try {
+        const { name, email, message } = await request.json();
+        const verifiedEmailCookie = request.cookies.get("verified_email")?.value;
 
-    if (!name || !email || !message) {
-        return NextResponse.json({ error: "All fields are required." }, { status: 400 });
-    }
+        if (!name || !email || !message) {
+            return NextResponse.json({ error: "All fields are required." }, { status: 400 });
+        }
 
-    const decodedVerifiedEmailCookie = verifiedEmailCookie ? decodeURIComponent(verifiedEmailCookie) : undefined;
+        const decodedVerifiedEmailCookie = verifiedEmailCookie ? decodeURIComponent(verifiedEmailCookie) : undefined;
 
-    if (!isVerifiedEmailCookieValid(decodedVerifiedEmailCookie, email)) {
+        if (!isVerifiedEmailCookieValid(decodedVerifiedEmailCookie, email)) {
+            return NextResponse.json(
+                { error: "Verify the email first before submitting the form." },
+                { status: 403 }
+            );
+        }
+
+        await pool.query(
+            `INSERT INTO contacts (name, email, message, created_at) VALUES ($1, $2, $3, NOW())`,
+            [name, email, message]
+        );
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error("Contact form submission failed:", error);
         return NextResponse.json(
-            { error: "Verify the email first before submitting the form." },
-            { status: 403 }
+            { error: "Unable to save your message right now. Please try again." },
+            { status: 500 }
         );
     }
-
-    await pool.query(
-        `INSERT INTO contacts (name, email, message, created_at) VALUES ($1, $2, $3, NOW())`,
-        [name, email, message]
-    );
-
-    return NextResponse.json({ success: true });
 }

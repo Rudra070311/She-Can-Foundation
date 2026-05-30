@@ -26,7 +26,7 @@ async function postJsonWithRetry(url: string, payload: unknown, attempts = 2) {
     try {
       return await fetch(url, {
         method: "POST",
-        credentials: "same-origin",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -130,7 +130,7 @@ export default function Form() {
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        credentials: "same-origin",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
